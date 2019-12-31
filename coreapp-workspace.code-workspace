@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "CoreApp.API"
+		},
+		{
+			"path": "CoreApp-SPA"
+		}
+	],
+	"settings": {}
+}
