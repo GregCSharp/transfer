@@ -17,6 +17,8 @@ namespace CoreApp.API.Helpers
                 .ForMember(destination => destination.Age,
                     options => options.MapFrom( source => 
                         source.DateOfBirth.CalculateAge()));
+
+
             CreateMap<User, UserForDetailedDto>()
                 .ForMember(destination => destination.PhotoUrl, 
                     options => options.MapFrom(source => 
@@ -24,7 +26,11 @@ namespace CoreApp.API.Helpers
                 .ForMember(destination => destination.Age,
                     options => options.MapFrom( source => 
                         source.DateOfBirth.CalculateAge()));
+
+
             CreateMap<Photo, PhotoForDetailtedDto>();
+
+            CreateMap<UserForUpdateDto, User>();
         }
     }
 }
