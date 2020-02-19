@@ -58,6 +58,7 @@ namespace CoreApp.API
             //DI
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ICoreRepository, CoreRepository>();
+            services.AddScoped<LogUserActivity>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
