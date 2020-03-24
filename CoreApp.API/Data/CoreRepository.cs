@@ -112,5 +112,45 @@ namespace CoreApp.API.Data
         {
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<Message> GetMessage(int id)
+        {
+            return await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams)
+        {
+            var messages = _context.Messages
+                .Include(msg => msg.Sender).ThenInclude(sender => sender.Photos)
+                .Include(msg => msg.Recipient).ThenInclude(recipient => recipient.Photos)
+                .AsQueryable();
+
+            switch (messageParams.MessageContainer.ToLower())
+            {
+                case "inbox" : messages = messages.Where(msg => msg.RecipientId == messageParams.UserId);
+                    break;
+                case "outbox" : messages = messages.Where(msg => msg.SenderId == messageParams.UserId);
+                    break;
+                default : messages = messages.Where(msg => msg.RecipientId == messageParams.UserId && msg.IsRead == false);
+                    break;
+            }
+
+            messages = messages.OrderByDescending(msg => msg.MessageSent);
+
+            return await PagedList<Message>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
+        }
+
+        public async Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId)
+        {
+             var messages = await _context.Messages
+                .Include(msg => msg.Sender).ThenInclude(sender => sender.Photos)
+                .Include(msg => msg.Recipient).ThenInclude(recipient => recipient.Photos)
+                .Where(msg => msg.RecipientId == userId && msg.SenderId == recipientId 
+                    || msg.RecipientId == recipientId && msg.SenderId == userId)
+                .OrderByDescending(msg => msg.MessageSent)
+                .ToListAsync();
+            
+            return messages;
+        }
     }
 }

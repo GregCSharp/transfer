@@ -11,6 +11,7 @@ import { Routes, CanActivate } from '@angular/router';
 import { MemberDetailResolver } from './app/_resolvers/member-detail.resolver';
 import { MemberEditResolver } from './app/_resolvers/member-edit.resolver';
 import { ListResolver } from './app/_resolvers/lists.resolver';
+// import { MessagesResolver } from './app/_resolvers/messages.resolver';
 
 // it works on a first match based, therefore the order is important
 export const appRoutes: Routes = [
@@ -24,6 +25,7 @@ export const appRoutes: Routes = [
             { path: 'members/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver}},
             { path: 'member/edit', component: MemberEditComponent, resolve: {user: MemberEditResolver},
                 canDeactivate: [PreventUnsavedChanges] },
+            // { path: 'messages', component: MessagesComponent, resolve: {messages: MessagesResolver} },
             { path: 'messages', component: MessagesComponent },
             { path: 'lists', component: ListsComponent, resolve: {users: ListResolver } }
         ]
